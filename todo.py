@@ -34,8 +34,8 @@ def add():
     return redirect(url_for('todo.index'))
 
 
-# @main.route('/delete/<int:todo_id>')
-# def delete(todo_id):
-#     t = Todo.query.get(todo_id)
-#     t.delete()
-#     return redirect(url_for('todo.index'))
+@main.route('/delete/<int:todo_id>')
+def delete(todo_id):
+    t = Todo.query.get(todo_id)
+    t.delete()
+    return redirect(url_for('todo.index'))

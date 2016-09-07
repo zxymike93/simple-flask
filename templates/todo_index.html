@@ -2,24 +2,31 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
+    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.3/css/bootstrap.css" rel="stylesheet">
     <title>Welcome to Todolist</title>
+    <style>
+        .center {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
-    <div>
+    <div class="center">
         <h1>Todo</h1>
         <form action={{ url_for("todo.add") }} method="post">
-            <input type="text" placeholder="待办事项" name="task">
-            <button type="submit">添加</button>
+            <input type="text" class="form-control" placeholder="待办事项" name="task">
+            <button class="btn btn-default" type="submit">添加</button>
         </form>
     </div>
 
-    <table>
+    <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Task</th>
-                <th>Time</th>
-                <th>Action</th>
+                <td>ID</td>
+                <td>Task</td>
+                <td>Time</td>
+                <td>Action</td>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +35,7 @@
                 <td>{{ t.id }}</td>
                 <td>{{ t.task }}</td>
                 <td>{{ t.created_time }}</td>
+                <td><a href={{ url_for('todo.delete', todo_id=t.id) }}>删除</a></td>
             </tr>
         {% endfor %}
         </tbody>
