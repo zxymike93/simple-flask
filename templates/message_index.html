@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Message</title>
+</head>
+<body>
+    <h1>Message</h1>
+    <form action="/message/add" method="POST">
+        <textarea name="message"></textarea>
+        <br>
+        <button type="submit">Add</button>
+    </form>
+    {# #}
+    {% for m in messages %}
+        <div class="class-message">{{ m.content }}</div>
+    {% endfor %}
+</body>
+</html>
