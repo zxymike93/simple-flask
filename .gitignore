@@ -94,3 +94,6 @@ ENV/
 
 # my project logs
 log.txt
+
+# database files
+*.db
