@@ -24,8 +24,11 @@ def login():
     form = request.form
     u = User(form)
     log('login u', u)
-    if u.validate_login():
+    user = User.query.filter_by(username=u.username).first()
+    if user is not None and user.validate_login(u):
         return redirect(url_for('todo.index'))
+    else:
+        return redirect(url_for('user.index'))
 
 
 @main.route('/user/register')

@@ -36,10 +36,12 @@ class User(db.Model):
         self.password = form.get('password', '')
 
     def validate_register(self):
-        return len(self.username) > 0 and len(self.password) > 0
+        return len(self.username) > 3 and len(self.password) > 3
 
-    def validate_login(self):
-        return True
+    def validate_login(self, u):
+        # u 是登录操作填的数据
+        # self 是根据 username filter 到的实例
+        return u.password == self.password
 
 
 class Todo(db.Model):
