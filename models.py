@@ -21,9 +21,16 @@ class User(db.Model):
     username = db.Column(db.String())
     password = db.Column(db.String())
 
+    def __repr__(self):
+        """
+        格式化 log 日志的输出
+        """
+        return u'<User {}>'.format(self.username)
+
     def __init__(self, form):
         self.username = form.get('username', '')
         self.password = form.get('password', '')
+
 
     def validate_login(self):
             return True
