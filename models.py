@@ -15,6 +15,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todos.db'
 db = SQLAlchemy(app)
 
 
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String())
+    password = db.Column(db.String())
+
+    def __init__(self):
+        self.username = form.get('username', '')
+        self.password = form.get('password', '')
+
 
 class Todo(db.Model):
     __tablename__ = 'todos'
