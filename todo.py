@@ -8,6 +8,7 @@ from flask import Blueprint
 from flask import abort
 
 from models import Todo
+from user import current_user
 
 from utils import log
 
@@ -16,10 +17,12 @@ main = Blueprint('todo', __name__)
 
 @main.route('/')
 def index():
+    u = current_user()
     log('todo index', Todo.query)
     todo_list = Todo.query.all()
     log('todo_index', todo_list)
     return render_template('todo_index.html',
+                             username=u.username,
                              todos=todo_list)
 
 
