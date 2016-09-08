@@ -19,7 +19,8 @@ def index():
     log('todo index', Todo.query)
     todo_list = Todo.query.all()
     log('todo_index', todo_list)
-    return render_template('todo_index.html', todos=todo_list)
+    return render_template('todo_index.html',
+                             todos=todo_list)
 
 
 @main.route('/add', methods=['POST'])
@@ -30,7 +31,7 @@ def add():
     if t.validate_todo():
         t.save()
     else:
-        abort(400)
+        abort(404)
     return redirect(url_for('todo.index'))
 
 
