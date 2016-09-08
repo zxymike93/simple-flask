@@ -21,9 +21,12 @@ class User(db.Model):
     username = db.Column(db.String())
     password = db.Column(db.String())
 
-    def __init__(self):
+    def __init__(self, form):
         self.username = form.get('username', '')
         self.password = form.get('password', '')
+
+    def validate_login(self):
+            return True
 
 
 class Todo(db.Model):
