@@ -26,3 +26,20 @@ def login():
     log('login u', u)
     if u.validate_login():
         return redirect(url_for('todo.index'))
+
+
+@main.route('/user/register')
+def register():
+    return render_template('register.html')
+
+
+@main.route('/user/new', methods=['POST'])
+def new():
+    form = request.form
+    u = User(form)
+    if u.validate_register():
+        log('user new', u.username, u.password)
+        u.save()
+    else:
+        abort(404)
+    return redirect(url_for('user.index'))

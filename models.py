@@ -27,13 +27,19 @@ class User(db.Model):
         """
         return u'<User {}>'.format(self.username)
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
     def __init__(self, form):
         self.username = form.get('username', '')
         self.password = form.get('password', '')
 
+    def validate_register(self):
+        return len(self.username) > 0 and len(self.password) > 0
 
     def validate_login(self):
-            return True
+        return True
 
 
 class Todo(db.Model):
