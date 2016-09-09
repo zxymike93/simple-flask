@@ -35,7 +35,8 @@ def login():
     user = User.query.filter_by(username=u.username).first()
     if user is not None and user.validate_login(u):
         session['user_id'] = user.id
-        return redirect(url_for('todo.index'))
+        # redirect 到动态路由，要传参数
+        return redirect(url_for('todo.index', username=user.username))
     else:
         return redirect(url_for('user.index'))
 

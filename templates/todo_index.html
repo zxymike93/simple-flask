@@ -2,25 +2,24 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.3/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></head>
+    <link href="/static/style.css" rel="stylesheet">
     <title>Welcome to Todolist</title>
-    <style>
-        .center {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-    </style>
 </head>
 <body>
-    <div class="center">
-        <h1>Todo</h1>
-        <form action={{ url_for("todo.add") }} method="post">
-            <input type="text" class="form-control" placeholder="待办事项" name="task">
-            <button class="btn btn-default" type="submit">添加</button>
-        </form>
+  <div id="id-div-center">
+    <div>
+        <h1>Hello, {{ username }}</h1>
     </div>
+    <div class="form-group">
+        <form action="{{ url_for('todo.add') }}" method="post">
+            <input id="id-input-task" class="form-control" type="text" placeholder="待办事项" name="task">
+        </form>
+        <button class="btn btn-default" type="submit">添加</button>
+    </div>
+  </div>
 
-    <table class="table">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <td>ID</td>
