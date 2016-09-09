@@ -15,21 +15,30 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todos.db'
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+class ModelHelper(object):
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def __repr__(self):
+        """
+        格式化 log 的输出
+        """
+        class_name = self.__class__.__name__
+        properties = ['{}: ({})'.format(k, v) for k, v in self.__dict__.items()]
+        s = '\n'.join(properties)
+        return '<{}\n{}>\n'.format(class_name, s)
+
+
+class User(db.Model, ModelHelper):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String())
     password = db.Column(db.String())
-
-    def __repr__(self):
-        """
-        格式化 log 日志的输出
-        """
-        return u'<User {}>'.format(self.username)
-
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
 
     def __init__(self, form):
         self.username = form.get('username', '')
@@ -44,22 +53,11 @@ class User(db.Model):
         return u.password == self.password
 
 
-class Todo(db.Model):
+class Todo(db.Model, ModelHelper):
     __tablename__ = 'todos'
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String())
     created_time = db.Column(db.Integer, default=0)
-
-    def __repr__(self):
-        return u'<ToDo {} {}>'.format(self.id, self.task)
-
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def __init__(self, form):
         self.task = form.get('task', '')
