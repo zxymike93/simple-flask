@@ -37,7 +37,7 @@ class ModelHelper(object):
 class User(db.Model, ModelHelper):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String())
+    username = db.Column(db.String(), unique=True)
     password = db.Column(db.String())
 
     def __init__(self, form):
@@ -58,6 +58,7 @@ class Todo(db.Model, ModelHelper):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String())
     created_time = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer)
 
     def __init__(self, form):
         self.task = form.get('task', '')
