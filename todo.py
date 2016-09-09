@@ -42,6 +42,11 @@ def add():
 
 @main.route('/delete/<int:todo_id>')
 def delete(todo_id):
-    t = Todo.query.get(todo_id)
-    t.delete()
-    return redirect(url_for('todo.index'))
+    u = current_user()
+    if u is not None:
+        t = Todo.query.get(todo_id)
+        t.user_id = u.id
+        t.delete()
+    else:
+        abort(404)
+    return redirect(url_for('todo.index', username=u.username))
