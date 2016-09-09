@@ -9,7 +9,7 @@ from flask import abort
 
 from models import Todo
 from models import User
-# from user import current_user
+from user import current_user
 
 from utils import log
 
@@ -20,7 +20,6 @@ main = Blueprint('todo', __name__)
 def index(username):
     u = User.query.filter_by(username=username).first()
     todo_list = Todo.query.filter_by(user_id=u.id).all()
-    log('todo_index', todo_list)
     return render_template('todo_index.html',
                              username=username,
                              todos=todo_list)
@@ -28,14 +27,17 @@ def index(username):
 
 @main.route('/add', methods=['POST'])
 def add():
-    form = request.form
-    t = Todo(form)
-    log('todo add', t)
-    if t.validate_todo():
-        t.save()
+    u = current_user()
+    if u is not None:
+        form = request.form
+        t = Todo(form)
+        t.user_id = u.id
+        log('todo add', t)
+        if t.validate_todo():
+            t.save()
     else:
         abort(404)
-    return redirect(url_for('todo.index'))
+    return redirect(url_for('todo.index', username=u.username))
 
 
 @main.route('/delete/<int:todo_id>')
