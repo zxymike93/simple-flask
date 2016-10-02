@@ -1,0 +1,80 @@
+body {
+    font-size: 16px;
+    font-family: sans-serif;
+    background-color: whitesmoke;
+}
+
+input {
+    border-style: solid;
+    border-width: 1px;
+    border-color: whitesmoke;
+    border-radius: 5px;
+    height: 35px;
+    width: 400px;
+    padding: 0px 15px;
+}
+
+button {
+    border-style: solid;
+    border-width: 1px;
+    border-color: whitesmoke;
+    border-radius: 7px;
+    width: 100px;
+    height: 35px;
+    font-size: medium;
+}
+
+.weibo-header {
+    color: black;
+    font-size: 60px;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.weibo-form {
+    text-align: center;
+}
+
+#id-input-weibo-content {
+    margin-bottom: 10px;
+}
+
+.weibo-container {
+    margin-top: 30px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 50px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: gray;
+    padding-top: 5px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 30px;
+}
+
+.weibo-content + .weibo-content {
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: lightgray;
+}
+.weibo-content {
+    margin-bottom: 50px;
+}
+
+.weibo-comment-all {
+    background-color: gainsboro;
+    border-radius: 3px;
+    padding-left: 15px;
+    padding-right: 15px
+}
+
+.weibo-comment-item + .weibo-comment-item {
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: aliceblue;
+}
+
+.weibo-comment-form {
+}

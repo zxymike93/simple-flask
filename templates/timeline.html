@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>微博</title>
+    <link rel="stylesheet" href="/static/css/timeline.css">
 </head>
 <body>
-    <div>
+    <div class="weibo-header">
         <h2>weibo</h2>
     </div>
-    <div>
+    <div class="weibo-form">
         <form action="/weibo/add" method="post">
-            <input name="content">
+            <input id="id-input-weibo-content" name="content">
             <br>
             <button>发布</button>
         </form>
     </div>
-    <div>
+    <div class="weibo-container">
         {% for w in weibos %}
-            <div>
+            <div class="weibo-content">
                 <p>{{ w.content }} @ {{ w.created_time }}</p>
-                <div>
+                <div class="weibo-comment-all">
                     {% for c in w.comments %}
-                    <div>
+                    <div class="weibo-comment-item">
                         <p>{{ c.content }}</p>
                     </div>
                     {% endfor %}
                 </div>
-                <div>
+                <div class="weibo-comment-form">
                     <form action="/comment/add" method="post">
                         <input type="hidden" name="weibo_id" value="{{ w.id }}">
                         <input name="content">
