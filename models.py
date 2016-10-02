@@ -53,6 +53,18 @@ class User(db.Model, ModelHelper):
         return u.password == self.password
 
 
+class Webibo(db.Model, ModelHelper):
+    __tablename__ = 'weibos'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Strint(), nullable=False)
+    created_time = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer)
+
+    def __init__(self, form):
+        self.content = form.get('content', '')
+        self.created_time = int(time.time())
+
+
 class Todo(db.Model, ModelHelper):
     __tablename__ = 'todos'
     id = db.Column(db.Integer, primary_key=True)
