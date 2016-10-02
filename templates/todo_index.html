@@ -2,19 +2,18 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></head>
-    <link href="/static/style.css" rel="stylesheet">
-    <title>Welcome to Todolist</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <title>Todo</title>
 </head>
 <body>
   <div id="id-div-center">
     <div>
-        <h1>Hello, {{ username }}</h1>
+        <h1>{{ username }}</h1>
     </div>
     <div class="form-group">
         <form action="{{ url_for('todo.add') }}" method="post">
             <input id="id-input-task" class="form-control" type="text" placeholder="待办事项" name="task">
-            <input type="submit" value="Add">
+            <button class="btn btn-primary" type="submit">添加</button>
         </form>
     </div>
   </div>

@@ -11,8 +11,14 @@
         <br>
         <button type="submit">Add</button>
     </form>
-    {# #}
+
+    {# jinja2 的注释方式 #}
+    {# jinja2 的语句放在{% %} #}
+    {# jinja2 的变量放在{{ }} #}
+
     {% for m in messages %}
+        {# m 是一个字典(这里只有一个值 content) #}
+        {# 用 . 的语法来访问字典 #}
         <div class="class-message">{{ m.content }}</div>
     {% endfor %}
 </body>
