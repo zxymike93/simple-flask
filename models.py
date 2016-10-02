@@ -63,6 +63,23 @@ class Weibo(db.Model, ModelHelper):
     def __init__(self, form):
         self.content = form.get('content', '')
         self.created_time = date()
+        self.comments = []
+
+    def show_comments(self):
+        self.comments = Comment.query.filter_by(weibo_id=self.id).all()
+
+
+class Comment(db.Model, ModelHelper):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String())
+    created_time = db.Column(db.String())
+    user_id = db.Column(db.Integer)
+    weibo_id = db.Column(db.Integer)
+
+    def __init__(self, form):
+        self.content = form.get('content', '')
+        self.created_time = date()
 
 
 class Todo(db.Model, ModelHelper):

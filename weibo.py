@@ -1,7 +1,7 @@
 from flask import Blueprint, session, abort, render_template,\
     request, redirect, url_for
 
-from models import User, Weibo
+from models import User, Weibo, Comment
 
 
 main = Blueprint('weibo', __name__)
@@ -16,15 +16,15 @@ def current_user():
 
 @main.route('/<username>/timeline')
 def timeline(username):
-    print('打开微博')
     u = User.query.filter_by(username=username).first()
     if u is None:
-        print('timeline abort')
         abort(404)
     else:
         # 把这个写进 ModelHelper 的方法里面
         # 就可以简化成 ws = u.Weibos()
         ws = Weibo.query.filter_by(user_id=u.id).all()
+        for w in ws:
+            w.show_comments()
         return render_template('timeline.html', weibos=ws)
 
 
@@ -37,6 +37,22 @@ def add():
         # Weibo 的 user_id 字段要手动传入
         w.user_id = u.id
         w.save()
+        return redirect(url_for('.timeline', username=u.username))
+    else:
+        abort(404)
+
+
+@main.route('/comment/add', methods=['POST'])
+def comment_add():
+    u = current_user()
+    if u is not None:
+        print('u 不是 none')
+        form = request.form
+        c = Comment(form)
+        print('add c', c)
+        c.user_id = u.id
+        c.weibo_id = int(form.get('weibo_id', -1))
+        c.save()
         return redirect(url_for('.timeline', username=u.username))
     else:
         abort(404)

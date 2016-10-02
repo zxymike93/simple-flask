@@ -5,14 +5,36 @@
     <title>微博</title>
 </head>
 <body>
-    <form action="/weibo/add" method="post">
-        <input name="content">
-        <br>
-        <button>发布</button>
-    </form>
-
-    {% for w in weibos %}
-        {{ w.content }} @ {{ w.created_time }}
-    {% endfor %}
+    <div>
+        <h2>weibo</h2>
+    </div>
+    <div>
+        <form action="/weibo/add" method="post">
+            <input name="content">
+            <br>
+            <button>发布</button>
+        </form>
+    </div>
+    <div>
+        {% for w in weibos %}
+            <div>
+                <p>{{ w.content }} @ {{ w.created_time }}</p>
+                <div>
+                    {% for c in w.comments %}
+                    <div>
+                        <p>{{ c.content }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div>
+                    <form action="/comment/add" method="post">
+                        <input type="hidden" name="weibo_id" value="{{ w.id }}">
+                        <input name="content">
+                        <button type="submit">评论</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </body>
 </html>
