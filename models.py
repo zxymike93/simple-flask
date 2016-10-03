@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from utils import date
 
+import json
+
 
 app = Flask(__name__)
 
@@ -80,6 +82,16 @@ class Comment(db.Model, ModelHelper):
     def __init__(self, form):
         self.content = form.get('content', '')
         self.created_time = date()
+
+    def json(self):
+        d = {
+            'id': self.id,
+            'content': self.content,
+            'created_time': self.created_time,
+            'weibo_id': self.weibo_id,
+            'user_id': self.user_id,
+        }
+        return json.dumps(d, ensure_ascii=False)
 
 
 class Todo(db.Model, ModelHelper):

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>微博</title>
     <link rel="stylesheet" href="/static/css/timeline.css">
+    <script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/static/js/timeline.js"></script>
 </head>
 <body>
     <div class="weibo-header">
@@ -28,11 +30,11 @@
                     {% endfor %}
                 </div>
                 <div class="weibo-comment-form">
-                    <form action="/comment/add" method="post">
-                        <input type="hidden" name="weibo_id" value="{{ w.id }}">
-                        <input name="content">
-                        <button type="submit">评论</button>
-                    </form>
+                    <!--<form action="/comment/add" method="post">-->
+                    <input class="weibo-comment-weibo_id" type="hidden" name="weibo_id" value="{{ w.id }}">
+                    <input class="weibo-comment-content" name="content">
+                    <button class="weibo-comment-add" type="submit">评论</button>
+                    <!--</form>-->
                 </div>
             </div>
         {% endfor %}
