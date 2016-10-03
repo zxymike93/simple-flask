@@ -1,16 +1,15 @@
 # encoding='utf-8'
 
-from flask import render_template
-from flask import request
-from flask import redirect
-from flask import url_for
 from flask import Blueprint
 from flask import abort
+from flask import redirect
+from flask import render_template
+from flask import request
+from flask import url_for
 
 from models import Todo
 from models import User
-from user import current_user
-
+from routes.user import current_user
 from utils import log
 
 main = Blueprint('todo', __name__)

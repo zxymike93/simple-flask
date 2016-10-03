@@ -3,10 +3,10 @@
 from flask import Flask
 from flask import render_template
 
-from todo import main as todo_routes
-from user import main as user_routes
-from weibo import main as weibo_routes
-from api import main as api_routes
+from routes.todo import main as todo_routes
+from routes.user import main as user_routes
+from routes.weibo import main as weibo_routes
+from routes.api import main as api_routes
 
 # from utils import log
 
