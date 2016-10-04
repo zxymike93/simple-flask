@@ -1,33 +1,29 @@
 <!DOCTYPE html>
-<head lang="zh-cn">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></head>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
+  <meta charset="UTF-8">
+  <title>首页</title>
+  <link rel="stylesheet" href="/static/css/timeline.css">
+  <style>
+    .login-container {
+      text-align: center;
+    }
+  </style>
 
+</html>
 <body>
-  <form id="id-index-form" class="form-horizontal" action="{{ url_for('user.login') }}" method="post">
-    <div class="form-group">
-      <label for="id-input-username" class="col-sm-2 control-label">用户名</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="id-input-username" name="username">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="id-input-password" class="col-sm-2 control-label">密码</label>
-      <div class="col-sm-10">
-        <input type="password" class="form-control" id="id-input-password" name="password">
-      </div>
-    </div>
-    <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">登录</button>
-    </div>
-    </div>
-  </form>
-  <a href="{{ url_for('user.register') }}">还没注册？</a>
+  <div class="weibo-header">
+      <h2>weibo</h2>
+  </div>
+  <div class="login-container">
+    <form action="{{ url_for('user.login') }}" method="post">
+      <input type="text" name="username" placeholder="用户名">
+      <br>
+      <input type="password" name="password" placeholder="密码">
+      <br>
+      <button type="submit">登录</button>
+    </form>
+    <a href="{{ url_for('user.register') }}">还没注册？</a>
+  </div>
 </body>
 </html>
