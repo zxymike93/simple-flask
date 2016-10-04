@@ -12,16 +12,17 @@
         <h2>weibo</h2>
     </div>
     <div class="weibo-form">
-        <form action="/weibo/add" method="post">
+        <!-- <form action="/weibo/add" method="post"> -->
             <input id="id-input-weibo-content" name="content">
             <br>
-            <button>发布</button>
-        </form>
+            <button id="id-button-weibo-add">发布</button>
+        <!-- </form> -->
     </div>
     <div class="weibo-container">
         {% for w in weibos %}
             <div class="weibo-content">
                 <p>{{ w.content }} @ {{ w.created_time }}</p>
+                <button class="weibo-delete" data-id="{{ w.id }}">删除</button>
                 <div class="weibo-comment-all">
                     {% for c in w.comments %}
                     <div class="weibo-comment-item">

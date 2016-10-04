@@ -1,5 +1,66 @@
+// 自定义一个 log 函数
+var log = function(){
+  console.log(arguments)
+}
+
+
+var weiboTemplate = function(w){
+  var template = `
+    <div class="weibo-content">
+      <p>${ w.content } @ ${ w.created_time }</p>
+      <button class="weibo-delete" data-id="{{ w.id }}">删除</button>
+    </div>
+  `
+  return template
+}
+
+
 // load 完 DOM 后再执行里面的代码
 $(document).ready(function(){
+  // 给发微博的按钮绑定事件
+  $('#id-button-weibo-add').on('click', function(){
+    // 因为 weibo-content 有 id，可以直接选中
+    var content = $('#id-input-weibo-content').val()
+    var form = {
+      'content': content,
+    }
+    request = {
+      'url': '/api/weibo/add',
+      'type': 'post',
+      'data': form,
+      'success': function(response){
+        var w = JSON.parse(response)
+        $('.weibo-container').prepend(weiboTemplate(w))
+
+      },
+      'error': function(){
+        log('失败', arguments)
+      }
+    }
+    $.ajax(request)
+  })
+
+  // 用‘事件委托’绑定删除 weibo 按钮事件
+  $('.weibo-container').on('click', '.weibo-delete', function(){
+    // 选中按钮本身用 this
+    var weiboId = $(this).data('id')
+    // 找到离按钮最近的 .weibo-content
+    var weiboContent = $(this).closest('.weibo-content')
+
+    var request = {
+      'url': '/api/weibo/delete/' + weiboId,
+      'type': 'post',
+      'success': function(){
+        log('成功', arguments)
+        $(weiboContent).slideUp()
+      },
+      'error': function(){
+        log('失败', arguments)
+      }
+    }
+    $.ajax(request)
+  })
+
     // 绑定按钮
     $('.weibo-comment-add').on('click', function(){
         // console.log('click weibo-comment-add')

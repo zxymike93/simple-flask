@@ -1,6 +1,6 @@
 from flask import Blueprint, session, request, abort
 
-from models import User, Comment
+from models import User, Weibo, Comment
 
 
 main = Blueprint('api', __name__)
@@ -11,6 +11,24 @@ def current_user():
     if uid is not None:
         u = User.query.get(uid)
         return u
+
+
+@main.route('/weibo/add', methods=['POST'])
+def weibo_add():
+    form = request.form
+    u = current_user()
+    w = Weibo(form)
+    w.user_id = u.id
+    if w.validate_weibo():
+        w.save()
+    return w.json()
+
+
+@main.route('/weibo/delete/<int:weibo_id>', methods=['POST'])
+def weibo_delete(weibo_id):
+    w = Weibo.query.get(weibo_id)
+    w.delete()
+    return w.json()
 
 
 @main.route('/comment/add', methods=['POST'])

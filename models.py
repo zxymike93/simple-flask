@@ -67,6 +67,18 @@ class Weibo(db.Model, ModelHelper):
         self.created_time = date()
         self.comments = []
 
+    def validate_weibo(self):
+        return len(self.content) > 0
+
+    def json(self):
+        d = dict(
+            id=self.id,
+            content=self.content,
+            created_time=self.created_time,
+            user_id=self.user_id
+        )
+        return json.dumps(d, ensure_ascii=False)
+
     def show_comments(self):
         self.comments = Comment.query.filter_by(weibo_id=self.id).all()
 
