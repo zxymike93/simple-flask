@@ -15,6 +15,50 @@ var weiboTemplate = function(w){
 }
 
 
+/*
+  现在每一个事件都要拼一个 request，都要调用一次 $.ajax()
+  重构的思路是：
+    造一个 api 它包含我想要做的功能，如: weiboAdd, commentDelete
+    只需调用这些 api.func() 传入“数据，回调函数”
+*/
+var api = {}
+/*
+  这个函数可以发一个打包了 request 的 ajax 请求
+  向哪里发送(url), 用什么http方法(method)，发送什么数据(form)
+  成功，失败的响应(success, error) 由传入的参数决定
+  但拼 request 和发送 ajax 请求的代码已经封装起来了
+*/
+api.ajax = function(url, method, form, success, error){
+  request = {
+    'url': url,
+    'type': method,
+    'data': form,
+    'success': success,
+    'error': error
+  }
+  $.ajax(request)
+}
+// get 方法
+api.get = function(url, success, error){
+  var form = {}
+  api.ajax(url, 'get', form, success, error)
+}
+// post 方法
+api.post = function(url, form, success, error){
+  api.ajax(url, 'post', form, success, error)
+}
+// 添加微博
+api.weiboAdd = function(form, success, error){
+  var url = '/api/weibo/add'
+  api.post(url, form, success, error)
+}
+// 删除微博
+api.weiboDelete = function(weiboId, success, error){
+  var url = '/api/weibo/delete/' + weiboId
+  api.get(url, success, error)
+}
+
+
 // load 完 DOM 后再执行里面的代码
 $(document).ready(function(){
   // 给发微博的按钮绑定事件
@@ -24,20 +68,14 @@ $(document).ready(function(){
     var form = {
       'content': content,
     }
-    request = {
-      'url': '/api/weibo/add',
-      'type': 'post',
-      'data': form,
-      'success': function(response){
-        var w = JSON.parse(response)
-        $('.weibo-container').prepend(weiboTemplate(w))
-
-      },
-      'error': function(){
-        log('失败', arguments)
-      }
+    var success = function(response){
+      var w = JSON.parse(response)
+      $('.weibo-container').prepend(weiboTemplate(w))
     }
-    $.ajax(request)
+    var error = function(){
+      log('失败', arguments)
+    }
+    api.weiboAdd(form, success, error)
   })
 
   // 用‘事件委托’绑定删除 weibo 按钮事件
@@ -46,19 +84,13 @@ $(document).ready(function(){
     var weiboId = $(this).data('id')
     // 找到离按钮最近的 .weibo-content
     var weiboContent = $(this).closest('.weibo-content')
-
-    var request = {
-      'url': '/api/weibo/delete/' + weiboId,
-      'type': 'post',
-      'success': function(){
-        log('成功', arguments)
-        $(weiboContent).slideUp()
-      },
-      'error': function(){
-        log('失败', arguments)
-      }
+    var success = function(){
+      $(weiboContent).slideUp()
     }
-    $.ajax(request)
+    var error = function(){
+      log('失败', arguments)
+    }
+    api.weiboDelete(weiboId, success, error)
   })
 
     // 绑定按钮

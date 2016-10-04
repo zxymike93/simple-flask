@@ -24,9 +24,10 @@ def weibo_add():
     return w.json()
 
 
-@main.route('/weibo/delete/<int:weibo_id>', methods=['POST'])
+@main.route('/weibo/delete/<int:weibo_id>', methods=['GET'])
 def weibo_delete(weibo_id):
     w = Weibo.query.get(weibo_id)
+    print('delete w', w)
     w.delete()
     return w.json()
 
