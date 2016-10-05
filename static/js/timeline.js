@@ -93,10 +93,18 @@ $(document).ready(function(){
     api.weiboDelete(weiboId, success, error)
   })
 
+  $('a.weibo-show-comment').on('click', function(){
+    var commentShow = $(this).parent().next()
+    // log('commentShow', commentShow)
+    commentShow.slideToggle()
+    return false
+  })
+
     // 绑定按钮
-    $('.weibo-comment-add').on('click', function(){
+    $('.weibo-content').on('click', '.weibo-comment-add', function(){
         // console.log('click weibo-comment-add')
         var button = $(this)
+        log('评论 button')
         // button 的父节点 .weibo-comment-form
         var parent = button.parent()
 
@@ -106,7 +114,7 @@ $(document).ready(function(){
         // console.log('weibo_id and content', weibo_id, content)
 
         // parent.parent 是 .weibo-content
-        var commentAll = parent.parent().find('.weibo-comment-all')
+        var commentList = parent.parent().find('.weibo-comment-list')
         // console.log('commentAll', commentAll)
 
         // 拼好 comment 的两个值，以及 request 的格式
@@ -133,7 +141,9 @@ $(document).ready(function(){
                         <p>${content}</p>
                     </div>
                 `
-                commentAll.append(item)
+                log('item', item)
+                commentList.append(item)
+                log('结束')
             },
             'error': function(){
                 console.log('失败', arguments)
