@@ -45,3 +45,10 @@ def comment_add():
         return c.json()
     else:
         abort(404)
+
+
+@main.route('/comment/delete/<int:comment_id>', methods=['GET'])
+def comment_delete(comment_id):
+    c = Comment.query.get(comment_id)
+    c.delete()
+    return c.json()

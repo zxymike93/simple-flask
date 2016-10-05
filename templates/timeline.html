@@ -24,11 +24,11 @@
             <p>{{ w.content }} @ {{ w.created_time }} <button class="weibo-delete" data-id="{{ w.id }}">删除</button></p>
             <a href="#" class="weibo-show-comment">评论</a>
         </div>
-        <div class="weibo-comment-all hide">
+        <div class="weibo-comment hide">
             <div class="weibo-comment-list">
             {% for c in w.comments %}
                 <div class="weibo-comment-item">
-                    <p>{{ c.content }}</p>
+                    <p>{{ c.content }} <button class="comment-delete" data-id="{{ c.id }}">删除</button></p>
                 </div>
             {% endfor %}
             </div>

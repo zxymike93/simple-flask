@@ -63,6 +63,19 @@ a {
     border-top-width: 2px;
     border-top-color: lightgray;
 }
+
+/*
+  临时处理
+  缺少这个 CSS 只有新发微博的时候有微博间的分割线
+  刷新后每个微博间就没有分割线了
+  最好在 .weibo-container 下面再包一层
+*/
+.weibo-comment + .weibo-content {
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: lightgray;
+}
+
 .weibo-content {
     margin-bottom: 10px;
 }
@@ -71,11 +84,17 @@ a {
     display: none;
 }
 
-.weibo-comment-all {
+.weibo-comment {
     background-color: gainsboro;
     border-radius: 3px;
     padding-left: 15px;
     padding-right: 15px
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
+
+.weibo-comment-list {
+    padding-top: 10px;
 }
 
 .weibo-comment-item + .weibo-comment-item {
@@ -85,4 +104,8 @@ a {
 }
 
 .weibo-comment-form {
+    padding: 10px;
+    border-radius: 3px;
+    border-style: inset;
+    background: whitesmoke;
 }

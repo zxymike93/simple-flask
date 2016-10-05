@@ -7,8 +7,21 @@ var log = function(){
 var weiboTemplate = function(w){
   var template = `
     <div class="weibo-content">
-      <p>${ w.content } @ ${ w.created_time }</p>
-      <button class="weibo-delete" data-id="{{ w.id }}">删除</button>
+      <p>
+        ${ w.content } @ ${ w.created_time }
+        <button class="weibo-delete" data-id="{{ w.id }}">删除</button>
+      </p>
+      <a href="#" class="weibo-show-comment">评论</a>
+    </div>
+  `
+  return template
+}
+
+
+var commentTemplate = function(c) {
+  var template = `
+    <div class="weibo-comment-item">
+        <p>${ c.content } <button class="comment-delete" data-id="{{ c.id }}">删除</button></p>
     </div>
   `
   return template
@@ -57,6 +70,16 @@ api.weiboDelete = function(weiboId, success, error){
   var url = '/api/weibo/delete/' + weiboId
   api.get(url, success, error)
 }
+// 添加评论
+api.commentAdd = function(form, success, error) {
+  var url = '/api/comment/add'
+  api.post(url, form, success, error)
+}
+// 删除评论
+api.commentDelete = function(commentId, success, error) {
+  var url = '/api/comment/delete/' + commentId
+  api.get(url, success, error)
+}
 
 
 // load 完 DOM 后再执行里面的代码
@@ -93,62 +116,99 @@ $(document).ready(function(){
     api.weiboDelete(weiboId, success, error)
   })
 
-  $('a.weibo-show-comment').on('click', function(){
-    var commentShow = $(this).parent().next()
+  // 评论开关
+  $('.weibo-container').on('click', 'a.weibo-show-comment', function(){
+    var button = $(this)
+    var commentShow = button.parent().next()
     // log('commentShow', commentShow)
     commentShow.slideToggle()
     return false
   })
 
-    // 绑定按钮
-    $('.weibo-content').on('click', '.weibo-comment-add', function(){
-        // console.log('click weibo-comment-add')
-        var button = $(this)
-        log('评论 button')
-        // button 的父节点 .weibo-comment-form
-        var parent = button.parent()
+  // 添加评论
+  $('.weibo-container').on('click', '.weibo-comment-add', function() {
+    var parent = $(this).parent()
+    var weiboId = parent.find('.weibo-comment-weibo_id').val()
+    var commentContent = parent.find('.weibo-comment-content').val()
+    var form = {
+      'weibo_id': weiboId,
+      'content': commentContent,
+    }
+    var success = function(response) {
+      var c = JSON.parse(response)
+      var commentList = parent.parent().find('.weibo-comment-list')
+      commentList.append(commentTemplate(c))
+    }
+    var error = function() {
+      log('失败', arguments)
+    }
+    api.commentAdd(form, success, error)
+  })
 
-        // 得到 comment 的两个值
-        var weibo_id = parent.find('.weibo-comment-weibo_id').val()
-        var content = parent.find('.weibo-comment-content').val()
-        // console.log('weibo_id and content', weibo_id, content)
+  // 删除评论
+  $('.weibo-comment').on('click', '.comment-delete', function() {
+    var button = $(this)
+    var commentId = button.data('id')
+    log('commentId', commentId)
+    var commentItem = button.closest('.weibo-comment-item')
+    log('commentItem', commentItem.val())
+    var success = function() {
+      $(commentItem).slideUp()
+    }
+    var error = function() {
+      alert('失败')
+    }
+    api.commentDelete(commentId, success, error)
+  })
 
-        // parent.parent 是 .weibo-content
-        var commentList = parent.parent().find('.weibo-comment-list')
-        // console.log('commentAll', commentAll)
-
-        // 拼好 comment 的两个值，以及 request 的格式
-        // 发送 ajax 请求
-        var comment = {
-            'weibo_id': weibo_id,
-            'content': content
-        }
-        var request = {
-            'url': '/api/comment/add',
-            'type': 'post',
-            'data': comment,
-            'success': function(){
-                // console.log('成功', arguments)
-                // 0: "{"created_time": "2016/10/03 17:19:23", "id": 21, "weibo_id": 1, "user_id": 1, "content": ""}"
-                // 1: "success"
-                // 2: Object
-                var response = arguments[0]
-                // str 转为 json 对象(字典)
-                var comment = JSON.parse(response)
-                var content = comment.content
-                var item = `
-                    <div class="weibo-comment-item">
-                        <p>${content}</p>
-                    </div>
-                `
-                log('item', item)
-                commentList.append(item)
-                log('结束')
-            },
-            'error': function(){
-                console.log('失败', arguments)
-            }
-        }
-        $.ajax(request)
-    })
+    // // 绑定按钮
+    // $('.weibo-content').on('click', '.weibo-comment-add', function(){
+    //     // console.log('click weibo-comment-add')
+    //     var button = $(this)
+    //     // button 的父节点 .weibo-comment-form
+    //     var parent = button.parent()
+    //
+    //     // 得到 comment 的两个值
+    //     var weibo_id = parent.find('.weibo-comment-weibo_id').val()
+    //     var content = parent.find('.weibo-comment-content').val()
+    //     // console.log('weibo_id and content', weibo_id, content)
+    //
+    //     // parent.parent 是 .weibo-content
+    //     var commentList = parent.parent().find('.weibo-comment-list')
+    //     // console.log('commentAll', commentAll)
+    //
+    //     // 拼好 comment 的两个值，以及 request 的格式
+    //     // 发送 ajax 请求
+    //     var comment = {
+    //         'weibo_id': weibo_id,
+    //         'content': content
+    //     }
+    //     var request = {
+    //         'url': '/api/comment/add',
+    //         'type': 'post',
+    //         'data': comment,
+    //         'success': function(){
+    //             // console.log('成功', arguments)
+    //             // 0: "{"created_time": "2016/10/03 17:19:23", "id": 21, "weibo_id": 1, "user_id": 1, "content": ""}"
+    //             // 1: "success"
+    //             // 2: Object
+    //             var response = arguments[0]
+    //             // str 转为 json 对象(字典)
+    //             var comment = JSON.parse(response)
+    //             var content = comment.content
+    //             var item = `
+    //                 <div class="weibo-comment-item">
+    //                     <p>${content}</p>
+    //                 </div>
+    //             `
+    //             log('item', item)
+    //             commentList.append(item)
+    //             log('结束')
+    //         },
+    //         'error': function(){
+    //             console.log('失败', arguments)
+    //         }
+    //     }
+    //     $.ajax(request)
+    // })
 })
