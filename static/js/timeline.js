@@ -46,8 +46,17 @@ api.ajax = function(url, method, form, success, error){
     'url': url,
     'type': method,
     'data': form,
-    'success': success,
-    'error': error
+    'success': function(response) {
+      var r = JSON.parse(response)
+      success(r)
+    },
+    'error': function(err) {
+      var r = {
+        'success': false,
+        'message': '网络错误',
+      }
+      error(r)
+    },
   }
   $.ajax(request)
 }
@@ -57,13 +66,13 @@ api.get = function(url, success, error){
   api.ajax(url, 'get', form, success, error)
 }
 // post 方法
-api.post = function(url, form, success, error){
-  api.ajax(url, 'post', form, success, error)
+api.post = function(url, form, response){
+  api.ajax(url, 'post', form, response, response)
 }
 // 添加微博
-api.weiboAdd = function(form, success, error){
+api.weiboAdd = function(form, resposne){
   var url = '/api/weibo/add'
-  api.post(url, form, success, error)
+  api.post(url, form, response)
 }
 // 删除微博
 api.weiboDelete = function(weiboId, success, error){
@@ -91,8 +100,7 @@ $(document).ready(function(){
     var form = {
       'content': content,
     }
-    var success = function(response){
-      var r = JSON.parse(response)
+    var response = function(r){
       if (r.success) {
         var w = r.data
         $('.weibo-container').prepend(weiboTemplate(w))
@@ -101,10 +109,7 @@ $(document).ready(function(){
         alert(r.message)
       }
     }
-    var error = function(){
-      alert()
-    }
-    api.weiboAdd(form, success, error)
+    api.weiboAdd(form, response)
   })
 
   // 用‘事件委托’绑定删除 weibo 按钮事件
