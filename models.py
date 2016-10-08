@@ -68,7 +68,13 @@ class Weibo(db.Model, ModelHelper):
         self.comments = []
 
     def validate_weibo(self):
-        return len(self.content) > 0
+        return len(self.content) >= 2 and len(self.content) <= 20
+
+    def error_message(self):
+        if len(self.content) < 2:
+            return '微博长度必须大于等于 2 个字符'
+        elif len(self.content) > 20:
+            return '微博长度必须小于等于 20 个字符'
 
     def json(self):
         d = dict(
@@ -77,7 +83,8 @@ class Weibo(db.Model, ModelHelper):
             created_time=self.created_time,
             user_id=self.user_id
         )
-        return json.dumps(d, ensure_ascii=False)
+        # return json.dumps(d, ensure_ascii=False)
+        return d
 
     def show_comments(self):
         self.comments = Comment.query.filter_by(weibo_id=self.id).all()

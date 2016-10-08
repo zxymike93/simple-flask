@@ -1,6 +1,7 @@
 from flask import Blueprint, session, request, abort
 
 from models import User, Weibo, Comment
+import json
 
 
 main = Blueprint('api', __name__)
@@ -19,9 +20,18 @@ def weibo_add():
     u = current_user()
     w = Weibo(form)
     w.user_id = u.id
+    r = {
+        'data': [],
+    }
     if w.validate_weibo():
         w.save()
-    return w.json()
+        r['success'] = True
+        r['data'] = w.json()
+    else:
+        r['success'] = False
+        message = w.error_message()
+        r['message'] = message
+    return json.dumps(r, ensure_ascii=False)
 
 
 @main.route('/weibo/delete/<int:weibo_id>', methods=['GET'])

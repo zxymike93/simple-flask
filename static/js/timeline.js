@@ -92,11 +92,17 @@ $(document).ready(function(){
       'content': content,
     }
     var success = function(response){
-      var w = JSON.parse(response)
-      $('.weibo-container').prepend(weiboTemplate(w))
+      var r = JSON.parse(response)
+      if (r.success) {
+        var w = r.data
+        $('.weibo-container').prepend(weiboTemplate(w))
+        alert('发送微博成功')
+      } else {
+        alert(r.message)
+      }
     }
     var error = function(){
-      log('失败', arguments)
+      alert()
     }
     api.weiboAdd(form, success, error)
   })
@@ -109,9 +115,10 @@ $(document).ready(function(){
     var weiboContent = $(this).closest('.weibo-content')
     var success = function(){
       $(weiboContent).slideUp()
+      alert('删除微博成功')
     }
     var error = function(){
-      log('失败', arguments)
+      alert('删除微博失败')
     }
     api.weiboDelete(weiboId, success, error)
   })
@@ -138,9 +145,10 @@ $(document).ready(function(){
       var c = JSON.parse(response)
       var commentList = parent.parent().find('.weibo-comment-list')
       commentList.append(commentTemplate(c))
+      alert('添加评论成功')
     }
     var error = function() {
-      log('失败', arguments)
+      alert('添加评论失败')
     }
     api.commentAdd(form, success, error)
   })
@@ -154,9 +162,10 @@ $(document).ready(function(){
     log('commentItem', commentItem.val())
     var success = function() {
       $(commentItem).slideUp()
+      alert('删除评论成功')
     }
     var error = function() {
-      alert('失败')
+      alert('删除评论失败')
     }
     api.commentDelete(commentId, success, error)
   })
