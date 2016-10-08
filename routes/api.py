@@ -50,11 +50,19 @@ def comment_add():
         c = Comment(form)
         c.user_id = u.id
         c.weibo_id = int(form.get('weibo_id', -1))
-        c.save()
-        # 只返回数据而不是整个页面
-        return c.json()
-    else:
-        abort(404)
+        r = {
+            'data': [],
+        }
+        if c.validate_comment():
+            c.save()
+            r['success'] = True
+            r['data'] = c.json()
+        else:
+            r['success'] = False
+            message = c.error_message()
+            r['message'] = message
+        print('r', r)
+        return json.dumps(r, ensure_ascii=False)
 
 
 @main.route('/comment/delete/<int:comment_id>', methods=['GET'])

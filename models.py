@@ -110,7 +110,17 @@ class Comment(db.Model, ModelHelper):
             'weibo_id': self.weibo_id,
             'user_id': self.user_id,
         }
-        return json.dumps(d, ensure_ascii=False)
+        # return json.dumps(d, ensure_ascii=False)
+        return d
+
+    def validate_comment(self):
+        return len(self.content) >= 2 and len(self.content) <= 20
+
+    def error_message(self):
+        if len(self.content) < 2:
+            return '评论不能少于 2 个字符'
+        elif len(self.content) > 20:
+            return '评论不能多过 20 个字符'
 
 
 class Todo(db.Model, ModelHelper):
