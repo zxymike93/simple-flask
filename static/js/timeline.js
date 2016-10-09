@@ -28,16 +28,23 @@ var commentTemplate = function(c) {
 }
 
 
-// load 完 DOM 后再执行里面的代码
-$(document).ready(function(){
-  // 给发微博的按钮绑定事件
-  $('#id-button-weibo-add').on('click', function(){
+var bindEventWeiboAdd = function() {
+  $('#id-button-weibo-add').on('click', function() {
     // 因为 weibo-content 有 id，可以直接选中
     var content = $('#id-input-weibo-content').val()
     var form = {
       'content': content,
     }
-    var response = function(r){
+    var response = function(r) {
+      /*
+        response 回调函数，在 ajax 调用完成后被调用
+        参数 r 是后端传过来的，格式为：
+          r = {
+            'success': Boolean
+            'data': 数据
+            'message': 错误提示
+          }
+      */
       if (r.success) {
         var w = r.data
         $('.weibo-container').prepend(weiboTemplate(w))
@@ -48,22 +55,97 @@ $(document).ready(function(){
     }
     api.weiboAdd(form, response)
   })
+}
 
-  // 用‘事件委托’绑定删除 weibo 按钮事件
-  $('.weibo-container').on('click', '.weibo-delete', function(){
+
+var bindEventWeiboDelete = function() {
+  $('.weibo-container').on('click', '.weibo-delete', function() {
     // 选中按钮本身用 this
     var weiboId = $(this).data('id')
     // 找到离按钮最近的 .weibo-content
     var weiboContent = $(this).closest('.weibo-content')
-    var success = function(){
-      $(weiboContent).slideUp()
-      alert('删除微博成功')
+    var response = function(r) {
+      if (r.success) {
+          $(weiboContent).slideUp()
+          alert('删除微博成功')
+      } else {
+        alert('删除微博失败')
+      }
     }
-    var error = function(){
-      alert('删除微博失败')
-    }
-    api.weiboDelete(weiboId, success, error)
+    api.weiboDelete(weiboId, response)
   })
+}
+
+
+//var bindEventWeiboEdit = function() {
+//  $('.weibo-container').on('click', '.', function() {
+//    log('click')
+//    var text = $(this)
+//    var div = text.closest('.weibo-content')
+//    var form = `
+//      <div class="weibo-update-form">
+//        <input type="text" value="edit">
+//        <button class="weibo-update">更新</button>
+//      </div>
+//    `
+//    div.append(form)
+//  })
+//}
+
+
+var bindEvents = function() {
+  // 不同的事件用不同的函数绑定
+  // 在 bindEvents 函数里一起执行
+
+  // bindEventCommentToggle()
+  bindEventWeiboAdd()
+  bindEventWeiboDelete()
+}
+
+
+$(document).ready(function() {
+  // 页面加载完成后调用这个函数
+  // 函数内部只调用一个 bindEvents 函数
+  bindEvents()
+})
+
+
+// load 完 DOM 后再执行里面的代码
+$(document).ready(function(){
+  // // 给发微博的按钮绑定事件
+  // $('#id-button-weibo-add').on('click', function(){
+  //   // 因为 weibo-content 有 id，可以直接选中
+  //   var content = $('#id-input-weibo-content').val()
+  //   var form = {
+  //     'content': content,
+  //   }
+  //   var response = function(r){
+  //     if (r.success) {
+  //       var w = r.data
+  //       $('.weibo-container').prepend(weiboTemplate(w))
+  //       alert('发送微博成功')
+  //     } else {
+  //       alert(r.message)
+  //     }
+  //   }
+  //   api.weiboAdd(form, response)
+  // })
+
+  // 用‘事件委托’绑定删除 weibo 按钮事件
+  // $('.weibo-container').on('click', '.weibo-delete', function(){
+  //   // 选中按钮本身用 this
+  //   var weiboId = $(this).data('id')
+  //   // 找到离按钮最近的 .weibo-content
+  //   var weiboContent = $(this).closest('.weibo-content')
+  //   var success = function(){
+  //     $(weiboContent).slideUp()
+  //     alert('删除微博成功')
+  //   }
+  //   var error = function(){
+  //     alert('删除微博失败')
+  //   }
+  //   api.weiboDelete(weiboId, success, error)
+  // })
 
   // 评论开关
   $('.weibo-container').on('click', 'a.weibo-show-comment', function(){
@@ -121,55 +203,4 @@ $(document).ready(function(){
     }
     api.commentDelete(commentId, success, error)
   })
-
-    // // 绑定按钮
-    // $('.weibo-content').on('click', '.weibo-comment-add', function(){
-    //     // console.log('click weibo-comment-add')
-    //     var button = $(this)
-    //     // button 的父节点 .weibo-comment-form
-    //     var parent = button.parent()
-    //
-    //     // 得到 comment 的两个值
-    //     var weibo_id = parent.find('.weibo-comment-weibo_id').val()
-    //     var content = parent.find('.weibo-comment-content').val()
-    //     // console.log('weibo_id and content', weibo_id, content)
-    //
-    //     // parent.parent 是 .weibo-content
-    //     var commentList = parent.parent().find('.weibo-comment-list')
-    //     // console.log('commentAll', commentAll)
-    //
-    //     // 拼好 comment 的两个值，以及 request 的格式
-    //     // 发送 ajax 请求
-    //     var comment = {
-    //         'weibo_id': weibo_id,
-    //         'content': content
-    //     }
-    //     var request = {
-    //         'url': '/api/comment/add',
-    //         'type': 'post',
-    //         'data': comment,
-    //         'success': function(){
-    //             // console.log('成功', arguments)
-    //             // 0: "{"created_time": "2016/10/03 17:19:23", "id": 21, "weibo_id": 1, "user_id": 1, "content": ""}"
-    //             // 1: "success"
-    //             // 2: Object
-    //             var response = arguments[0]
-    //             // str 转为 json 对象(字典)
-    //             var comment = JSON.parse(response)
-    //             var content = comment.content
-    //             var item = `
-    //                 <div class="weibo-comment-item">
-    //                     <p>${content}</p>
-    //                 </div>
-    //             `
-    //             log('item', item)
-    //             commentList.append(item)
-    //             log('结束')
-    //         },
-    //         'error': function(){
-    //             console.log('失败', arguments)
-    //         }
-    //     }
-    //     $.ajax(request)
-    // })
 })

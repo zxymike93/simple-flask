@@ -14,32 +14,33 @@ def current_user():
         return u
 
 
+def api_response(success, data=None, message=''):
+    r = {
+        'success': success,
+        'data': data,
+        'message': message,
+    }
+    return json.dumps(r, ensure_ascii=False)
+
+
 @main.route('/weibo/add', methods=['POST'])
 def weibo_add():
     form = request.form
     u = current_user()
     w = Weibo(form)
     w.user_id = u.id
-    r = {
-        'data': [],
-    }
     if w.validate_weibo():
         w.save()
-        r['success'] = True
-        r['data'] = w.json()
+        return api_response(True, data=w.json())
     else:
-        r['success'] = False
-        message = w.error_message()
-        r['message'] = message
-    return json.dumps(r, ensure_ascii=False)
+        return api_response(False, message=w.error_message())
 
 
 @main.route('/weibo/delete/<int:weibo_id>', methods=['GET'])
 def weibo_delete(weibo_id):
     w = Weibo.query.get(weibo_id)
-    print('delete w', w)
     w.delete()
-    return w.json()
+    return api_response(True, data=w.json())
 
 
 @main.route('/comment/add', methods=['POST'])
@@ -50,23 +51,15 @@ def comment_add():
         c = Comment(form)
         c.user_id = u.id
         c.weibo_id = int(form.get('weibo_id', -1))
-        r = {
-            'data': [],
-        }
         if c.validate_comment():
             c.save()
-            r['success'] = True
-            r['data'] = c.json()
+            return api_response(True, data=c.json())
         else:
-            r['success'] = False
-            message = c.error_message()
-            r['message'] = message
-        print('r', r)
-        return json.dumps(r, ensure_ascii=False)
+            return api_response(False, message=c.error_message())
 
 
 @main.route('/comment/delete/<int:comment_id>', methods=['GET'])
 def comment_delete(comment_id):
     c = Comment.query.get(comment_id)
     c.delete()
-    return c.json()
+    return api_response(True, data=c.json())
