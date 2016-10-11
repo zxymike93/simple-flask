@@ -6,6 +6,7 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from flask import session
+from flask import flash
 
 from models import User
 
@@ -36,7 +37,7 @@ def login():
     if user is not None and user.validate_login(u):
         session['user_id'] = user.id
         # redirect 到动态路由，要传参数
-        return redirect(url_for('weibo.timeline', username=user.username))
+        return redirect(url_for('todo.index', username=user.username))
     else:
         return redirect(url_for('user.index'))
 
@@ -51,8 +52,10 @@ def new():
     form = request.form
     u = User(form)
     if u.validate_register():
-        log('user new', u.username, u.password)
+        print('验证通过')
         u.save()
+        return redirect(url_for('.index'))
     else:
-        abort(404)
-    return redirect(url_for('user.index'))
+        print('验证失败')
+        flash('alert')
+        return redirect(url_for('.register'))

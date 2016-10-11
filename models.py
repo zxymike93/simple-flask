@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from utils import date
 
+import datetime
 import json
 
 
@@ -47,7 +48,7 @@ class User(db.Model, ModelHelper):
         self.password = form.get('password', '')
 
     def validate_register(self):
-        return len(self.username) > 3 and len(self.password) > 3
+        return len(self.username) >= 6 and len(self.password) >= 6
 
     def validate_login(self, u):
         # u 是登录操作填的数据
@@ -132,7 +133,7 @@ class Todo(db.Model, ModelHelper):
 
     def __init__(self, form):
         self.task = form.get('task', '')
-        self.created_time = date()
+        self.created_time = datetime.date.today()
 
     def validate_todo(self):
         return len(self.task) > 0

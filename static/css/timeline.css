@@ -109,3 +109,13 @@ a {
     border-style: inset;
     background: whitesmoke;
 }
+
+.weibo-content:hover {
+    background: white;
+}
+
+/*
+.active {
+    background: white;
+}
+*/

@@ -1,42 +1,38 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/css/bootstrap.css">
+<html>
+  <head>
+    <meta charset="utf-8">
     <title>Todo</title>
-</head>
-<body>
-  <div id="id-div-center">
-    <div>
-        <h1>{{ username }}</h1>
+    <link rel="icon" href="/static/icon">
+    <link rel="stylesheet" href="/static/css/todo.css">
+  </head>
+  <body>
+    <div class="mike-container">
+      <div class="todo-main">
+        <div class="mike-header">
+          <h1>TODO</h1>
+          <h2>记录你的待办事项</h2>
+        </div>
+        <div class="">
+          <form id="id-div-form" action="{{ url_for('.add' )}}" method="post">
+            <!-- <div class="todo-form-textinput mike-input-wrapper"> -->
+            <input id="id-input-add" type="text" name="task">
+            <!-- </div> -->
+            <button id="id-button-add">添加</button>
+          </form>
+        </div>
+        <div class="todo-content">
+          {% for todo in todo_list %}
+            <div class="todo-task-cell">
+              <div class="todo-task-item">
+                <a class="todo-task-item-done" href="{{ url_for('.delete', todo_id=todo.id) }}">
+                  {{ todo.task }}
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-        <form action="{{ url_for('todo.add') }}" method="post">
-            <input id="id-input-task" class="form-control" type="text" placeholder="待办事项" name="task">
-            <button class="btn btn-primary" type="submit">添加</button>
-        </form>
-    </div>
-  </div>
-
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <td>ID</td>
-                <td>Task</td>
-                <td>Time</td>
-                <td>Action</td>
-            </tr>
-        </thead>
-        <tbody>
-        {% for t in todos %}
-            <tr>
-                <td>{{ t.id }}</td>
-                <td>{{ t.task }}</td>
-                <td>{{ t.created_time }}</td>
-                <td><a href={{ url_for('todo.delete', todo_id=t.id) }}>删除</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</body>
+  </body>
 </html>

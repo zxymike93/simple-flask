@@ -1,0 +1,71 @@
+a {
+  text-decoration: none;
+  color: dodgerblue;
+}
+button:hover {
+  opacity: 0.7;
+}
+.mike-container {
+  text-align: center;
+}
+.mike-main {
+  width: 300px;
+  margin: auto;
+  margin-top: 150px;
+}
+.mike-header h1 {
+  font-size: 77px;
+  color: dodgerblue;
+  font-family: sans-serif;
+  margin-bottom: 0;
+}
+.mike-header h2 {
+  font-size: 18px;
+}
+.mike-tag {
+  margin: 30px 0px 10px;
+}
+.mike-block {
+  height: 3px;
+  width: 45px;
+  position: relative;
+  left: 127px;;
+  background-color: dodgerblue;
+}
+.mike-form-textinput {
+  margin-top: 20px;
+  border-style: solid;
+  border-radius: 3px;
+  border-width: 1px;
+  border-color: lightgray;
+}
+.mike-input-wrapper input {
+  width: 90%;
+  height: 35px;
+  margin: 5px;
+  border: none;
+  outline: none;
+}
+.mike-input-wrapper + .mike-input-wrapper {
+  border-style: solid;
+  border-width: 0px;
+  border-top-width: 1px;
+  border-color: lightgray;
+}
+.mike-button-big {
+  width: 100%;
+  height: 35px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: dodgerblue;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 16px;
+}
+#id-div-register_link a {
+  color: dodgerblue;
+}
+#id-div-register_link a:hover {
+  color: lightgray;
+}

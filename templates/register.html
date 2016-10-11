@@ -1,19 +1,43 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>注册</title>
-</head>
+  <meta charset="UTF-8">
+  <title>注册</title>
+  <link rel="stylesheet" href="/static/css/index.css">
+</html>
 <body>
-<form action={{ url_for("user.new") }} method="post" class="form-inline">
-  <div class="form-group">
-    <label class="sr-only" for="id-input-username">Username</label>
-    <input id="id-input-username" type="text" class="form-control" name="username" placeholder="用户名">
+  <div class="mike-container">
+    <div class="mike-main">
+      <div class="mike-header">
+        <h1>TODO</h1>
+        <h2>记录你的待办事项</h2>
+      </div>
+      <div class="mike-form">
+        <div class="mike-tag">
+          <span>注册</span>
+          <div class="mike-block"></div>
+        </div>
+        <div id="id-div-register">
+          <form action="{{ url_for('.new') }}" method="post">
+            <div class="mike-form-textinput">
+              <div class="mike-input-wrapper">
+                <input type="text" name="username" placeholder="用户名">
+              </div>
+              <div class="mike-input-wrapper">
+               <input type="password" name="password" placeholder="密码">
+              </div>
+            </div>
+            <button class="mike-button-big">注册</button>
+          </form>
+        </div>
+    </div>
+    <div class="mike-alert">
+      {% if get_flashed_messages() %}
+        {% for m in get_flashed_messages() %}
+          {{ m }}
+        {% endfor %}
+      {% endif %}
+    </div>
   </div>
-  <div class="form-group">
-    <label class="sr-only" for="id-input-password">Password</label>
-    <input id="id-input-password" type="password" class="form-control" name="password" placeholder="密码">
-  </div>
-  <button type="submit" class="btn btn-default">注册</button>
 </body>
 </html>

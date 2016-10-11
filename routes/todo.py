@@ -19,9 +19,7 @@ main = Blueprint('todo', __name__)
 def index(username):
     u = User.query.filter_by(username=username).first()
     todo_list = Todo.query.filter_by(user_id=u.id).all()
-    return render_template('todo_index.html',
-                             username=username,
-                             todos=todo_list)
+    return render_template('todo_index.html', todo_list=todo_list)
 
 
 @main.route('/add', methods=['POST'])
@@ -31,12 +29,12 @@ def add():
         form = request.form
         t = Todo(form)
         t.user_id = u.id
-        log('todo add', t)
+        print('todo add', t)
         if t.validate_todo():
             t.save()
     else:
         abort(404)
-    return redirect(url_for('todo.index', username=u.username))
+    return redirect(url_for('.index', username=u.username))
 
 
 @main.route('/delete/<int:todo_id>')
