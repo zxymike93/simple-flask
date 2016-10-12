@@ -49,8 +49,6 @@ class User(db.Model, ModelHelper):
         return len(self.username) >= 6 and len(self.password) >= 6
 
     def validate_login(self, u):
-        # u 是登录操作填的数据
-        # self 是根据 username filter 到的实例
         return u.password == self.password
 
 

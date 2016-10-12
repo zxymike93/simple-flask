@@ -10,7 +10,7 @@ from flask import url_for
 from models import Todo
 from models import User
 from routes.user import current_user
-from utils import log
+
 
 main = Blueprint('todo', __name__)
 
@@ -29,7 +29,6 @@ def add():
         form = request.form
         t = Todo(form)
         t.user_id = u.id
-        print('todo add', t)
         if t.validate_todo():
             t.save()
     else:

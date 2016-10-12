@@ -10,8 +10,6 @@ from flask import flash
 
 from models import User
 
-from utils import log
-
 
 main = Blueprint('user', __name__)
 
@@ -32,11 +30,9 @@ def index():
 def login():
     form = request.form
     u = User(form)
-    # log('login u', u)
     user = User.query.filter_by(username=u.username).first()
     if user is not None and user.validate_login(u):
         session['user_id'] = user.id
-        # redirect 到动态路由，要传参数
         return redirect(url_for('todo.index', username=user.username))
     else:
         return redirect(url_for('user.index'))
@@ -52,10 +48,8 @@ def new():
     form = request.form
     u = User(form)
     if u.validate_register():
-        print('验证通过')
         u.save()
         return redirect(url_for('.index'))
     else:
-        print('验证失败')
         flash('alert')
         return redirect(url_for('.register'))
