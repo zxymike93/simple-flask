@@ -51,5 +51,5 @@ def new():
         u.save()
         return redirect(url_for('.index'))
     else:
-        flash('alert')
+        # flash('')
         return redirect(url_for('.register'))
